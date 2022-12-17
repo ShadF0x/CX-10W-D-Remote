@@ -1,5 +1,6 @@
 package org.cyanotic.cx10.net;
 
+import org.cyanotic.cx10.common.KillableThread;
 import org.cyanotic.cx10.utils.ByteUtils;
 
 import java.io.*;
@@ -8,7 +9,7 @@ import java.net.Socket;
 /**
  * Created by cyanotic on 19/11/2016.
  */
-public class Heartbeat extends Thread {
+public class Heartbeat extends KillableThread {
 
     private final String host;
     private final int port;
@@ -33,7 +34,7 @@ public class Heartbeat extends Thread {
 
     @Override
     public void run() {
-        while (!isInterrupted()) {
+        while (!isKilled()) {
             try {
                 sendHeartBeat();
                 Thread.sleep(5000);

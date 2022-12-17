@@ -20,6 +20,7 @@ public class FFPlayProcessVideoPlayer implements IVideoPlayer {
             stop();
         }
         try {
+            System.out.println(System.getProperty("user.dir"));
             String output = "tcp://" + HOSTNAME + ":" + PORT + "?listen";
             if (SO == "win")
                 ffplay = new ProcessBuilder("cmd", "/c", "start", "ffplay", "-probesize", "64", "-sync", "ext", output)

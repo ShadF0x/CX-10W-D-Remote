@@ -1,12 +1,13 @@
 package org.cyanotic.cx10.io.controls;
 
+import org.cyanotic.cx10.common.KillableThread;
 import org.cyanotic.cx10.model.Command;
 import org.cyanotic.cx10.net.CommandConnection;
 
 /**
  * Created by cyanotic on 19/11/2016.
  */
-public class Controller extends Thread implements IController.CommandListener {
+public class Controller extends KillableThread implements IController.CommandListener {
 
     private final IController controller;
     private final CommandConnection dataConnection;
@@ -31,7 +32,7 @@ public class Controller extends Thread implements IController.CommandListener {
         controller.setListener(this);
         controller.start();
 
-        while (!isInterrupted()) {
+        while (!isKilled()) {
             dataConnection.sendCommand(lastCommand);
             hold();
         }

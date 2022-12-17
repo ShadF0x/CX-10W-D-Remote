@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 /**
  * Created by cyanotic on 27/11/2016.
  */
-public class CX10NalDecoder {
+public class CX10NalDecoder extends InputStream {
 
     private static byte[] ph = ByteUtils.asUnsigned(
             0x00, 0x00, 0x00, 0x19, 0xD0,
@@ -29,6 +29,8 @@ public class CX10NalDecoder {
     private boolean initialized = false;
     private int sequence = 0;
 
+    private ByteBuffer buffer;
+
     public CX10NalDecoder(String host, int port) throws IOException {
         this.host = host;
         this.port = port;
@@ -41,7 +43,18 @@ public class CX10NalDecoder {
         inputStream = new DataInputStream(socket.getInputStream());
     }
 
-    public byte[] readNal() throws IOException {
+    @Override
+    public int read() throws IOException {
+        if (buffer == null) {
+            buffer = ByteBuffer.wrap(ByteUtils.loadMessageFromFile("videoheader.bin"));
+        } else if (!buffer.hasRemaining()) {
+            byte[] bytesRead = readNal();
+            buffer = ByteBuffer.wrap(bytesRead);
+        }
+        return buffer.get() & 0xFF;
+    }
+
+    private byte[] readNal() throws IOException {
         if (!initialized) {
             byte[] bytes = ByteUtils.loadMessageFromFile("video.bin");
             outputStream.write(bytes);

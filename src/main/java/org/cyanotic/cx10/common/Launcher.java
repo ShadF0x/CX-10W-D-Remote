@@ -1,4 +1,4 @@
-package org.cyanotic.cx10;
+package org.cyanotic.cx10.common;
 
 import com.ivan.xinput.exceptions.XInputNotLoadedException;
 import org.cyanotic.cx10.ui.MainWindow;
